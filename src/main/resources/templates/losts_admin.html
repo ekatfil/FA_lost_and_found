@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://bootstrap-4.ru/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/fingerprint-search-symbol-of-secret-service-investigation.png" type="image/png">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous" > </script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
+
+    <link href="../static/style.css" th:href="@{/style.css}" rel="stylesheet"/>
+    <title>Бюро находок ФУ|Потери</title>
+</head>
+<body id="body-block">
+<main class="container">
+    <nav class="navbar navbar-expand-lg navbar-light" id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/fa-logo.png" alt="fin" width="142px" height="45px"></a>
+            <button class="navbar-toggler collapsed" style="background-color: white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Переключатель навигации">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-main" aria-current="page" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about_project">О проекте</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="btn-stat" class="nav-link" href="/">Статистика</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Базы данных
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/losts">Потери</a></li>
+                            <li><a class="dropdown-item" href="/finds">Находки</a></li>
+                        </ul>
+                    </li>
+                    <li><button type="button" class="btn dropdown-item" id="btn-enter">Аккаунт</button></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h2 id="losts-title">Потери</h2>
+    <section class="block">
+        <div class="row">
+            <div class="col-md-8 offset-md-4" style="color: #ffffff">
+                <form id="search-form" th:action="@{/losts}">
+                    <input class="search-row" type="text" name="keyword1" id="keyword1" size="70" th:value="${keyword1}" required/>
+                    <input type="submit" class="btn btn-success btn-sm" value="Поиск"/>
+                    <input type="button" class="btn btn-warning btn-sm" value="Очистить" id="btnClear"
+                           onclick="clearSearch()"/>
+                </form>
+            </div>
+        </div>
+        <table id="losts-table" class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col" class="text-white">Дата</th>
+                <th scope="col" class="text-white">Категория</th>
+                <th scope="col" class="text-white">Подкатегория</th>
+                <th scope="col" class="text-white">Место</th>
+                <th scope="col" class="text-white">Описание</th>
+                <th scope="col" class="text-white">Контактные данные</th>
+                <th scope="col" class="text-white">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lost: ${listLost}">
+                <th scope="row" class="text-white" th:text="${lost.lostDate}">Дата</th>
+                <th scope="row" class="text-white" th:text="${lost.lostCategory}">Категория</th>
+                <th scope="row" class="text-white" th:text="${lost.lostSubcategory}">Подкатегория</th>
+                <th scope="row" class="text-white" th:text="${lost.lostPlace}">Место</th>
+                <th scope="row" class="text-white" th:text="${lost.lostDescription}">Описание</th>
+                <th scope="row" class="text-white" th:text="${lost.lostContacts}">Контактные данные</th>
+                <td>
+                    <button class="btn edit-button" data-bs-toggle="modal" data-bs-target="#add-edit-modal" data-id="1" th:id="${lost.lostId}" onclick="getData(this)">Редактировать</button>
+                    <a th:href="@{'/delete_lost/'+${lost.lostId}}"><button type="button" class="btn btn-danger" style="background-color: #8C211F; color: #fff;border-color: #ffffff;">Удалить</button></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <blockquote class="blockquote text-center">
+            <button type="button" class="btn btn-primary" id="add-find-btn">Добавить</button>
+        </blockquote>
+
+        <div class="modal fade" id="add-find-modal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="exampleModalLabel" style="color:black">Новая потеря</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="find-form" th:action="@{/save_lost}" th:object="${lost}" method="post">
+                            <div class="mb-3">
+                                <label for="recipient-date" class="col-form-label">Дата:</label>
+                                <input type="date" class="form-control" id="recipient-date" th:field="*{lostDate}" required th:max="${T(java.time.LocalDate).now()}" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-category" class="col-form-label">Категория:</label>
+                                <input type="text" class="form-control" id="recipient-category" th:field="*{lostCategory}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-subcategory" class="col-form-label">Подкатегория:</label>
+                                <input type="text" class="form-control" id="recipient-subcategory" th:field="*{lostSubcategory}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-place" class="col-form-label">Место:</label>
+                                <input type="text" class="form-control" id="recipient-place" th:field="*{lostPlace}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Описание:</label>
+                                <textarea class="form-control" id="message-text" th:field="*{lostDescription}" style="height: 100px;"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-contacts" class="col-form-label">Контакты:</label>
+                                <input type="text" class="form-control" id="recipient-contacts" th:field="*{lostContacts}" required>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="add-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="exampleModalLabel1" style="color: black">Редактирование потери</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-form" th:action="@{'/update_lost'}" th:object="${lost}" method="post">
+                            <input type="hidden" id="lost-lostId" name="lostId" th:value="${lost.lostId}">
+                            <div class="mb-3">
+                                <label for="recipient-date1" class="col-form-label">Дата:</label>
+                                <input type="date" class="form-control" id="recipient-date1" name="lostDate" required th:max="${T(java.time.LocalDate).now()}" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-category1" class="col-form-label">Категория:</label>
+                                <input type="text" class="form-control" id="recipient-category1" name="lostCategory" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-subcategory1" class="col-form-label">Подкатегория:</label>
+                                <input type="text" class="form-control" id="recipient-subcategory1" name="lostSubcategory" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-place1" class="col-form-label">Место:</label>
+                                <input type="text" class="form-control" id="recipient-place1" name="lostPlace" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text1" class="col-form-label">Описание:</label>
+                                <textarea class="form-control" id="message-text1" name="lostDescription" style="height: 100px;"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-contacts1" class="col-form-label">Контакты:</label>
+                                <input type="text" class="form-control" id="recipient-contacts1" name="lostContacts" required>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Обновить</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<script>
+    var btnEnter = document.getElementById('btn-enter');
+    btnEnter.addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+</script>
+
+
+<script>
+    var addFindBtn = document.getElementById("add-find-btn");
+    var addFindModal = new bootstrap.Modal(document.getElementById("add-find-modal"));
+
+    addFindBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        addFindModal.show();
+        document.getElementById("recipient-date1").focus();
+    });
+</script>
+
+<script th:inline="javascript" type="text/javascript">
+    function getData(button) {
+        var id = button.getAttribute("id");
+        var losts = /*[[${listLost}]]*/ ;
+        var targetLost = losts.find(function(lost) {
+            return lost.lostId === parseInt(id);
+        });
+
+        if (targetLost) {
+            document.getElementById("lost-lostId").value = targetLost.lostId;
+            document.getElementById("recipient-date1").value = targetLost.lostDate;
+            document.getElementById("recipient-category1").value = targetLost.lostCategory;
+            document.getElementById("recipient-subcategory1").value = targetLost.lostSubcategory;
+            document.getElementById("recipient-place1").value = targetLost.lostPlace;
+            document.getElementById("message-text1").value = targetLost.lostDescription;
+            document.getElementById("recipient-contacts1").value = targetLost.lostContacts;
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/losts}]]";
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#losts-table').DataTable({searching: false, paging: false, info: false,
+            columnDefs: [{ orderable: false, targets: -1 }]
+        })
+    });
+</script>
+</body>
+</html>

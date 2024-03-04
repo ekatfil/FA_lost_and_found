@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:tiles="http://www.w3.org/1999/xhtml"
+      lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://bootstrap-4.ru/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <style>
+        #myChart {
+            width: 50%;
+            height: 50%;
+            margin: 0 auto;
+        }
+    </style>
+    <link href="../static/style.css" th:href="@{/style.css}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/fingerprint-search-symbol-of-secret-service-investigation.png" type="image/png">
+    <title>Бюро находок ФУ</title>
+</head>
+<body id="index-page">
+<main class="container">
+    <section class="main-page">
+            <nav class="navbar navbar-expand-lg navbar-light" id="nav">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <img src="/static/images/fa-logo.png" alt="fin" width="142px" height="45px"></a>
+                    <button class="navbar-toggler collapsed" style="background-color: white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Переключатель навигации">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" id="nav-main" aria-current="page" href="#">Главная</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about_project">О проекте</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="btn-stat" class="nav-link" href="#">Статистика</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Базы данных
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/losts">Потери</a></li>
+                                    <li><a class="dropdown-item" href="/finds">Находки</a></li>
+                                </ul>
+                            </li>
+                            <li><button type="button" class="btn dropdown-item" id="btn-enter">Аккаунт</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <h1>Бюро находок</h1>
+            <h1 id="fu">Финансового университета</h1>
+            <h3>Теперь твои вещи в надёжных руках!
+                Заполняй форму и отправляйся
+                на поиски!</h3>
+            <button type="button" class="btn" id="btn-start">Начать</button>
+            <p class="smartwatch"><img src="/static/images/smartwatch.png" th:src="@{/static/images/smartwatch.png}" alt="Часы"></p>
+            <p class="airpods"><img src="../static/images/airpods.png" alt="Airpods"></p>
+            <p class="headphones"><img src="../static/images/headphones.png" alt="Наушники"></p>
+            <p class="cable"><img src="../static/images/cable.png" alt="Кабель"></p>
+            <input type="image" id="arrow-1" class="arrow-down" src="../static/images/material-symbols_keyboard-double-arrow-down-rounded.png" alt="Стрелка-1">
+    </section>
+    <section class="second-page">
+        <h2 id="search">Как мы поможем вам в поисках?</h2>
+        <a href="/about_project">
+            <div class="card" id="card-1">
+                <div class="ellipse"></div>
+                <img class="card-img-top" src="../static/images/data 1.png" alt="data">
+                <div class="card-body">
+                    <h5 class="card-title">О проекте</h5>
+                    <p class="card-text">Здесь мы собрали для Вас актуальную информацию о проекте и его создателе</p>
+                </div>
+            </div>
+        </a>
+        <a href="/losts">
+            <div class="card" id="card-2">
+                <div class="ellipse"></div>
+                <img class="card-img-top" src="../static/images/box 1.png" alt="data">
+                <div class="card-body">
+                    <h5 class="card-title">Потери</h5>
+                    <p class="card-text">Поиск Ваших вещей не заставит долго ждать! Заполняй форму и отправляйся на поиски!</p>
+                </div>
+            </div>
+        </a>
+        <a href="/finds">
+            <div class="card" id="card-3">
+                <div class="ellipse"></div>
+                <img class="card-img-top" src="../static/images/packaging 1.png" alt="data">
+                <div class="card-body">
+                    <h5 class="card-title">Находки</h5>
+                    <p class="card-text">Нашёл вещь и не знаешь как быть? Заполняй форму и владелец сам тебя найдёт!</p>
+                </div>
+            </div>
+        </a>
+        <input type="image" id="arrow-2" class="arrow-down" src="../static/images/material-symbols_keyboard-double-arrow-down-rounded.png" alt="Стрелка-2">
+    </section>
+
+    <section class="third-page">
+        <h2 id="stat">Статиcтика находок</h2>
+        <div class="statisctics-bg">
+            <div class="statisctics">
+                <blockquote class="blockquote text-center" style="color: #ffffff"></blockquote>
+                <canvas id="myChart" style="width:90%; height:80%"></canvas>
+                <script th:inline="javascript" type="text/javascript">
+                    var xValues = /*[[${dates}]]*/ "Dates"
+                    var yValues = /*[[${hist}]]*/ [1]
+
+                    new Chart("myChart", {
+                        type: "bar",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: "white",
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {
+                                display: true,
+                            },
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        color: "rgba(255, 255, 255, 0.5)"
+                                    },
+                                    ticks: {
+                                        fontColor: 'white',
+                                        beginAtZero: true,
+                                        stepSize: 1
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Кол-во находок',
+                                        fontColor: 'white',
+                                        fontSize: 16,
+                                        fontStyle: 'bold'
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        color: "rgba(255, 255, 255, 0.5)"
+                                    },
+                                    ticks: {
+                                        fontColor: 'white'
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Дата',
+                                        fontColor: 'white',
+                                        fontFamily: 'Roboto',
+                                        fontSize: 16,
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script><blockquote class="blockquote text-center">
+            </blockquote></div>
+        </div>
+
+    </section>
+</main>
+
+<script>
+    var btnEnter = document.getElementById('btn-enter');
+    btnEnter.addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+</script>
+
+<script>
+    const btn = document.getElementById('btn-start');
+    let isClicked = false;
+
+    btn.addEventListener('click', function() {
+        setTimeout(function() {
+            if (btn.innerHTML === 'Начать') {
+                btn.innerHTML = 'Продолжить';
+            } else {
+                btn.innerHTML = 'Продолжить';
+            }
+        }, 2000);
+
+        const startY = window.pageYOffset;
+        const targetY = startY + 920;
+        const duration = 920; // время анимации в миллисекундах
+        const startTime = performance.now();
+
+        function scroll() {
+            const currentTime = performance.now();
+            const timeElapsed = currentTime - startTime;
+            const scrollY = easeInOutQuad(timeElapsed, startY, targetY - startY, duration);
+            window.scrollTo(0, scrollY);
+            if (timeElapsed < duration) requestAnimationFrame(scroll);
+        }
+
+        function easeInOutQuad(t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t + b;
+            t--;
+            return -c/2 * (t*(t-2) - 1) + b;
+        }
+
+        requestAnimationFrame(scroll);
+    });
+
+</script>
+
+<script>
+    const btn1 = document.getElementById('btn-stat');
+
+    btn1.addEventListener('click', function() {
+        const startY = window.pageYOffset;
+        const targetY = startY + 2760;
+        const duration = 2760; // время анимации в миллисекундах
+        const startTime = performance.now();
+
+        function scroll1() {
+            const currentTime = performance.now();
+            const timeElapsed = currentTime - startTime;
+            const scrollY = easeInOutQuad(timeElapsed, startY, targetY - startY, duration);
+            window.scrollTo(0, scrollY);
+            if (timeElapsed < duration) requestAnimationFrame(scroll1);
+        }
+
+        function easeInOutQuad(t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t + b;
+            t--;
+            return -c/2 * (t*(t-2) - 1) + b;
+        }
+
+        requestAnimationFrame(scroll1);
+    });
+
+</script>
+
+<script>
+    const btns = document.querySelectorAll('.arrow-down');
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const startY = window.pageYOffset;
+            const targetY = startY + 920;
+            const duration = 920; // время анимации в миллисекундах
+            const startTime = performance.now();
+
+            function scroll() {
+                const currentTime = performance.now();
+                const timeElapsed = currentTime - startTime;
+                const scrollY = easeInOutQuad(timeElapsed, startY, targetY - startY, duration);
+                window.scrollTo(0, scrollY);
+                if (timeElapsed < duration) requestAnimationFrame(scroll);
+            }
+
+            function easeInOutQuad(t, b, c, d) {
+                t /= d/2;
+                if (t < 1) return c/2*t*t + b;
+                t--;
+                return -c/2 * (t*(t-2) - 1) + b;
+            }
+            requestAnimationFrame(scroll);
+        });
+    });
+</script>
+
+</body>
+</html>
